@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,18 +41,18 @@ public class IngredientControllers {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Ingredient> delete(@PathVariable long id) {	
+	public ResponseEntity<String> delete(@PathVariable long id) {	
 	    Optional<Ingredient> i = iRepo.findById(id);
 	    if (!i.isPresent())
-	        return ResponseEntity.notFound().build();
+	        return new ResponseEntity<>("Ingredient id is invalid", HttpStatus.NOT_FOUND);
 	    
 		iRepo.delete(i.get());
-        return ResponseEntity.ok().body(i.get());
+        return new ResponseEntity<>("Ingredient deleted successfully", HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Ingredient> findUserById(@PathVariable long id) {
-	    Optional<Ingredient> ingredient = iRepo.findById(id);
+	    Optional<Ingredient> ingredient = iRepo.findById(id);  
 	 
 	    if(ingredient.isPresent()) {
 	        return ResponseEntity.ok().body(ingredient.get());
@@ -69,7 +70,7 @@ public class IngredientControllers {
 	    	ing.setName(i.getName());
 			ing.setPrice(i.getPrice());
 			ing.setCategory(i.getCategory());
-			return ResponseEntity.ok().body(iRepo.save(ing));
+			return new ResponseEntity<Ingredient>(iRepo.save(ing), HttpStatus.CREATED);
 	    }
 	    else
 	        return ResponseEntity.notFound().build();
