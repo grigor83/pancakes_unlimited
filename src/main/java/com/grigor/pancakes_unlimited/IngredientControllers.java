@@ -25,7 +25,7 @@ public class IngredientControllers {
 	IngredientRepo iRepo;
 	@Autowired
 	PancakeRepo pRepo;
-	@Autowired
+	//@Autowired
 	//@PersistenceContext
 	//EntityManager em;
 	

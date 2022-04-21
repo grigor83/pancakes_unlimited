@@ -26,6 +26,7 @@ CREATE TABLE ingredients_list (
 	FOREIGN KEY 		(ingredient_id)		references ingredient (id) on delete cascade
 );
 
+
 CREATE TABLE order_table (
 	id					BIGINT not null AUTO_INCREMENT PRIMARY KEY,
     time				DATETIME not null,
@@ -40,4 +41,5 @@ CREATE TABLE pancakes_list (
 	FOREIGN KEY 		(order_id) references order_table (id)
 						on delete cascade
 );
+
 
