@@ -10,6 +10,13 @@ CREATE TABLE ingredient (
 );
 
 
+CREATE TABLE order_table (
+	id					BIGINT not null AUTO_INCREMENT PRIMARY KEY,
+    time				DATETIME not null,
+    description			VARCHAR(500)
+);
+
+
 CREATE TABLE pancake (
 	id 					BIGINT 	not null 	AUTO_INCREMENT PRIMARY KEY,
 	basic_ingredient 	BIGINT	not null,
@@ -27,11 +34,6 @@ CREATE TABLE ingredients_list (
 );
 
 
-CREATE TABLE order_table (
-	id					BIGINT not null AUTO_INCREMENT PRIMARY KEY,
-    time				DATETIME not null,
-    description			VARCHAR(500)
-);
 
 CREATE TABLE pancakes_list (
 	order_id			BIGINT not null,

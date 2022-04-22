@@ -37,8 +37,7 @@ public class OrderValidator implements ConstraintValidator<OrderConstraint, Orde
 				return false;
 			}
 		}
-		
-		
+				
 		LocalDateTime localDateTime = LocalDateTime.now();
 		order.setTime(localDateTime);
 		return true;
@@ -48,15 +47,20 @@ public class OrderValidator implements ConstraintValidator<OrderConstraint, Orde
 		baseIngredient=false;
 		
 		if (pancake.getBasicIngredient().getCategory().equals("BASE"))
-			if (baseIngredient==false)
+			if (baseIngredient==false) {
 				baseIngredient=true;
+				System.out.println("basic sadrzi bazni");
+			}
 		
 		for (Ingredient ingredient : pancake.getIngredientsSet()) {
-			if (ingredient.getCategory().equals("BASE"))
-				if (baseIngredient==false)
+			if (ingredient.getCategory().equals("BASE")) {
+				if (baseIngredient==false) 
 					baseIngredient=true;
-				else
+				else {
+					baseIngredient=false;
 					return;
+				}
+			}	
 		}
 	}
 	

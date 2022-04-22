@@ -3,6 +3,9 @@ package com.grigor.pancakes_unlimited;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,15 @@ public class PancakeControllers {
 	PancakeRepo pRepo;
 	@Autowired 
 	IngredientRepo iRepo;
+	@Autowired
+	OrderRepo oRepo;
+	@PersistenceContext
+	EntityManager em;
 	
 	
 	@GetMapping
-	public List<Pancake> listPancakes(){
-		return pRepo.findAll();
+	public List<PancakeView> listPancakes(){
+		return pRepo.findBy();
 	}
 	
 	@PostMapping
@@ -43,6 +50,7 @@ public class PancakeControllers {
 	        return new ResponseEntity<>("Pancake id is invalid", HttpStatus.NOT_FOUND);
 		
 		pRepo.delete(p.get());
+		deleteOrderIfEmpty();
         return new ResponseEntity<>("Pancake deleted successfully", HttpStatus.ACCEPTED);
 	}
 	
@@ -61,5 +69,15 @@ public class PancakeControllers {
 	public ResponseEntity<Pancake> updatePancake(@PathVariable long id,@RequestBody @Valid Pancake p) {	
 		Pancake pancake= pRepo.save(p);	
 		return new ResponseEntity<Pancake>(pancake, HttpStatus.CREATED);
+	}
+	
+	public void deleteOrderIfEmpty() {
+		List<Long> orders = oRepo.findIDs();
+		for (Long id : orders) {
+			Query query= em.createNativeQuery("SELECT order_id from pancakes_list where order_id="+id);
+		    List<Object[]> list = query.getResultList();
+		    if (list.isEmpty())
+		    	oRepo.deleteById(id);
+		}
 	}
 }

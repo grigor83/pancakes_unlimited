@@ -65,5 +65,4 @@ public class Pancake {
 	public void setIngredientsSet(Set<Ingredient> ingredientsSet) {
 		this.ingredientsSet = ingredientsSet;
 	}
-	
 }

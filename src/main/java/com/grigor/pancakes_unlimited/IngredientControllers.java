@@ -3,6 +3,9 @@ package com.grigor.pancakes_unlimited;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,10 @@ public class IngredientControllers {
 	@Autowired
 	PancakeRepo pRepo;
 	//@Autowired
-	//@PersistenceContext
-	//EntityManager em;
+	@Autowired
+	OrderRepo oRepo;
+	@PersistenceContext
+	EntityManager em;
 	
 	
 	@GetMapping
@@ -47,6 +52,8 @@ public class IngredientControllers {
 	        return new ResponseEntity<>("Ingredient id is invalid", HttpStatus.NOT_FOUND);
 	    
 		iRepo.delete(i.get());
+		deleteOrderIfEmpty();	
+		
         return new ResponseEntity<>("Ingredient deleted successfully", HttpStatus.ACCEPTED);
 	}
 	
@@ -76,4 +83,13 @@ public class IngredientControllers {
 	        return ResponseEntity.notFound().build();
 	}
 	
+	public void deleteOrderIfEmpty() {
+		List<Long> orders = oRepo.findIDs();
+		for (Long id : orders) {
+			Query query= em.createNativeQuery("SELECT order_id from pancakes_list where order_id="+id);
+		    List<Object[]> list = query.getResultList();
+		    if (list.isEmpty())
+		    	oRepo.deleteById(id);
+		}
+	}
 }

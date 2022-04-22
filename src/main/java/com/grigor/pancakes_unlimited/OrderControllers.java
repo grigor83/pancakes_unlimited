@@ -1,8 +1,6 @@
 package com.grigor.pancakes_unlimited;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -29,8 +27,8 @@ public class OrderControllers {
 	EntityManager em;
 	
 	@GetMapping
-	public List<Order> orders(){
-		return oRepo.findAll();
+	public List<OrderView> orders(){
+		return oRepo.findBy();
 	}
 	
 	@PostMapping
