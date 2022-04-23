@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,12 +83,10 @@ public class IngredientControllers {
 	}
 	
 	public void deleteOrderIfEmpty() {
-		List<Long> orders = oRepo.findIDs();
-		for (Long id : orders) {
-			Query query= em.createNativeQuery("SELECT order_id from pancakes_list where order_id="+id);
-		    List<Object[]> list = query.getResultList();
-		    if (list.isEmpty())
-		    	oRepo.deleteById(id);
+		List<Order> ordersFromDB=oRepo.findAll();
+		for (Order order : ordersFromDB) {
+			if (order.getPancakes().size()==0)
+				oRepo.delete(order);
 		}
 	}
 }

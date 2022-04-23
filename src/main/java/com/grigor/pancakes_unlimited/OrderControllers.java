@@ -1,5 +1,6 @@
 package com.grigor.pancakes_unlimited;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,7 +40,9 @@ public class OrderControllers {
 			if (list.size()!=0)
 		        return new ResponseEntity<>("Your order is not accepted! One of pancakes in order list has already been purchased!", HttpStatus.BAD_REQUEST);
 		}
-		
+				
+		LocalDateTime now = LocalDateTime.now();
+		o.setTime(now);
 		oRepo.save(o);
         return new ResponseEntity<>("Your order is accepted!", HttpStatus.ACCEPTED);
 	}

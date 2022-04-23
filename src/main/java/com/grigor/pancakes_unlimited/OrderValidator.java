@@ -1,6 +1,5 @@
 package com.grigor.pancakes_unlimited;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.validation.ConstraintValidator;
@@ -38,8 +37,6 @@ public class OrderValidator implements ConstraintValidator<OrderConstraint, Orde
 			}
 		}
 				
-		LocalDateTime localDateTime = LocalDateTime.now();
-		order.setTime(localDateTime);
 		return true;
 	}
 	
@@ -49,7 +46,6 @@ public class OrderValidator implements ConstraintValidator<OrderConstraint, Orde
 		if (pancake.getBasicIngredient().getCategory().equals("BASE"))
 			if (baseIngredient==false) {
 				baseIngredient=true;
-				System.out.println("basic sadrzi bazni");
 			}
 		
 		for (Ingredient ingredient : pancake.getIngredientsSet()) {
