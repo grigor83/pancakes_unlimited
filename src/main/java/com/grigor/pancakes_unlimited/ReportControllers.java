@@ -1,8 +1,7 @@
 package com.grigor.pancakes_unlimited;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,14 +28,28 @@ public class ReportControllers {
 	@GetMapping
 	public Report list(){
 		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now();  
-		LocalDateTime monthBefore = now.minusDays(30);
+		LocalDateTime lastMonth = now.minusDays(30);
 		
-		Query query= em.createNativeQuery("SELECT id from order_table where time >= :monthBefore");
-		query.setParameter("monthBefore", monthBefore);
-	    List<Object[]> list = query.getResultList();
+		Query query= em.createNativeQuery("SELECT ingredient_id FROM"
+				+ "("
+				+ "SELECT ingredient_id, COUNT(*) AS maximum FROM"
+				+ "("
+				+ "SELECT pancakes_list.order_id, time, pancakes_list.pancake_id, ingredient_id "
+				+ "FROM pancakes_list JOIN order_table "
+				+ "ON order_table.id = pancakes_list.order_id "
+				+ "JOIN ingredients_list "
+				+ "ON ingredients_list.pancake_id=pancakes_list.pancake_id "
+				+ "WHERE time >= :monthBefore"
+				+ ") AS FIRST_TABLE "
+				+ "GROUP BY ingredient_id"
+				+ ") AS SECOND_TABLE "
+				+ "ORDER BY maximum LIMIT 1");
 		
-		return new Report(null, null);
+		query.setParameter("monthBefore", lastMonth);
+		BigInteger id=  (BigInteger) query.getSingleResult();
+	    Ingredient ingredient=iRepo.findById(id.longValue()).get();
+		
+		return new Report(lastMonth, now, ingredient, null);
 	}
 }

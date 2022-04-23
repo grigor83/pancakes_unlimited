@@ -1,30 +1,32 @@
 package com.grigor.pancakes_unlimited;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Report {
 	
-	private String mostOrderedIngredients;
-	private String mostOrderedHealthyIngredients;
+	DateTimeFormatter dtf;
+	private String title;
+	private Ingredient mostOrderedIngredient, mostOrderedHealthyIngredient;
 	
-	public Report(String mostOrderedIngredients, String mostOrderedHealthyIngredients) {
+	public Report(LocalDateTime lastMonth, LocalDateTime now, Ingredient mostOrderedIngredient, Ingredient mostOrderedHealthyIngredient) {
 		super();
-		this.mostOrderedIngredients = mostOrderedIngredients;
-		this.mostOrderedHealthyIngredients = mostOrderedHealthyIngredients;
+		this.mostOrderedIngredient = mostOrderedIngredient;
+		this.mostOrderedHealthyIngredient = mostOrderedHealthyIngredient;
+		dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
+		title="REPORTING PERIOD: from "+lastMonth.format(dtf) +" to "+now.format(dtf);
 	}
 
-	public String getMostOrderedIngredients() {
-		return mostOrderedIngredients;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setMostOrderedIngredients(String mostOrderedIngredients) {
-		this.mostOrderedIngredients = mostOrderedIngredients;
+	public Ingredient getMostOrderedIngredient() {
+		return mostOrderedIngredient;
 	}
 
-	public String getMostOrderedHealthyIngredients() {
-		return mostOrderedHealthyIngredients;
-	}
-
-	public void setMostOrderedHealthyIngredients(String mostOrderedHealthyIngredients) {
-		this.mostOrderedHealthyIngredients = mostOrderedHealthyIngredients;
+	public Ingredient getMostOrderedHealthyIngredient() {
+		return mostOrderedHealthyIngredient;
 	}
 
 }

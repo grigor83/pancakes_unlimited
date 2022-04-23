@@ -23,16 +23,20 @@ public class PancakeValidator implements ConstraintValidator<PancakeConstraint, 
 	    if (!i.isPresent())
 	        return false;
 	    
-	    Pancake pancake=new Pancake(i.get());	    
-	    if (p.getIngredientsSet() != null) {
-	    	for (Ingredient ingredient : p.getIngredientsSet()) {
+	    Pancake pancake=new Pancake(i.get());	   
+	    if (p.getIngredients() != null) {
+	    	for (Ingredient ingredient : p.getIngredients()) {
 		    	i = iRepo.findById(ingredient.getId());
 		    	if (i.isPresent())
-		    		pancake.getIngredientsSet().add(i.get());
+		    		pancake.getIngredients().add(i.get());
 			}
 	    }
+		pancake.getIngredients().add(pancake.getBasicIngredient());
 	    p.setBasicIngredient(pancake.getBasicIngredient());
-	    p.setIngredientsSet(pancake.getIngredientsSet());	    
+	    p.setIngredients(pancake.getIngredients());	    
+	    for (Ingredient ing : pancake.getIngredients()) {
+		    System.out.println(ing.getName());
+		}
 		return true;
 	}
 	

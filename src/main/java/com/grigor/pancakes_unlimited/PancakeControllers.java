@@ -3,8 +3,6 @@ package com.grigor.pancakes_unlimited;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +26,6 @@ public class PancakeControllers {
 	IngredientRepo iRepo;
 	@Autowired
 	OrderRepo oRepo;
-	@PersistenceContext
-	EntityManager em;
 	
 	
 	@GetMapping
@@ -38,8 +34,9 @@ public class PancakeControllers {
 	}
 	
 	@PostMapping
-	public Pancake createPancake(@RequestBody @Valid Pancake p) {
-		return pRepo.save(p);
+	public ResponseEntity<String> createPancake(@RequestBody @Valid Pancake p) {
+		pRepo.save(p);
+        return new ResponseEntity<>("Pancake created successfully", HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")

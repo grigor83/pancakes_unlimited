@@ -36,14 +36,14 @@ public class Pancake {
 			joinColumns = @JoinColumn(name = "pancake_id"), 
 			inverseJoinColumns = @JoinColumn(name = "ingredient_id")
 	)
-	private Set <Ingredient> ingredientsSet;
+	private Set <Ingredient> ingredients;
 	
 	
 	public Pancake() {};
 		
 	public Pancake(Ingredient i) {
 		this.basicIngredient=i;
-		this.ingredientsSet = new HashSet<>();
+		this.ingredients = new HashSet<>();
 	}	
 
 	public long getId() {
@@ -58,11 +58,11 @@ public class Pancake {
 		this.basicIngredient = basicIngredient;
 	}
 	
-	public Set<Ingredient> getIngredientsSet() {
-		return ingredientsSet;
+	public Set<Ingredient> getIngredients() {
+		return ingredients;
 	}
 
-	public void setIngredientsSet(Set<Ingredient> ingredientsSet) {
-		this.ingredientsSet = ingredientsSet;
+	public void setIngredients(Set<Ingredient> ingredients) {
+		this.ingredients = ingredients;
 	}
 }

@@ -9,6 +9,5 @@ public interface PancakeView {
     }
 	
 	long getId();
-	List<IngredientView> getIngredientsSet();    
-	IngredientView getBasicIngredient();	
+	List<IngredientView> getIngredients();    
 }

@@ -48,7 +48,7 @@ public class OrderValidator implements ConstraintValidator<OrderConstraint, Orde
 				baseIngredient=true;
 			}
 		
-		for (Ingredient ingredient : pancake.getIngredientsSet()) {
+		for (Ingredient ingredient : pancake.getIngredients()) {
 			if (ingredient.getCategory().equals("BASE")) {
 				if (baseIngredient==false) 
 					baseIngredient=true;
@@ -66,7 +66,7 @@ public class OrderValidator implements ConstraintValidator<OrderConstraint, Orde
 		if (pancake.getBasicIngredient().getCategory().equals("FILLING"))
 			fillIngredient=true;	
 		
-		for (Ingredient ingredient : pancake.getIngredientsSet()) {
+		for (Ingredient ingredient : pancake.getIngredients()) {
 			if (ingredient.getCategory().equals("FILLING"))
 				fillIngredient=true;	
 		}
