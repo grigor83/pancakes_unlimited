@@ -6,4 +6,5 @@ public interface OrderView {
 	long getId();
 	String getDescription();
 	List<PancakeView> getPancakes();
+	double getTotal();
 }

@@ -66,4 +66,12 @@ public class Order {
 	public void setPancakes(List<Pancake> pancakes) {
 		this.pancakes = pancakes;
 	}
+	
+	public double getTotal() {
+		double price=0;
+		for (Pancake pancake : pancakes) {
+			price+=pancake.getPrice();
+		}
+		return price;
+	}
 }

@@ -10,4 +10,5 @@ public interface PancakeView {
 	
 	long getId();
 	List<IngredientView> getIngredients();    
+	double getPrice();
 }

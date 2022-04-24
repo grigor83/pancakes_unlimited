@@ -65,4 +65,13 @@ public class Pancake {
 	public void setIngredients(Set<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
+	
+	public double getPrice() {
+		double price=0;
+		for (Ingredient ingredient : ingredients) {
+			price+=ingredient.getPrice();
+		}
+		
+		return price;
+	}
 }
