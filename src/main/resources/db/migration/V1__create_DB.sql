@@ -4,8 +4,8 @@ CREATE TABLE ingredient (
 	id 			BIGINT not null AUTO_INCREMENT PRIMARY KEY, 
 	name 		VARCHAR(50), 
 	price 		double,
-	category 	VARCHAR(10) not null,
-				size ENUM('BASE', 'FILLING', 'TOPPING', 'FRUIT'),
+	category 	ENUM('BASE', 'FILLING', 'TOPPING', 'FRUIT') not null,
+	healthy		BOOLEAN		not null,
 	constraint  UK_ingredient_name unique (name)
 );
 

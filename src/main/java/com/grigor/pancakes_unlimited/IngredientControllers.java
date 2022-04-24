@@ -49,6 +49,15 @@ public class IngredientControllers {
 	    Optional<Ingredient> i = iRepo.findById(id);
 	    if (!i.isPresent())
 	        return new ResponseEntity<>("Ingredient id is invalid", HttpStatus.NOT_FOUND);
+	    //delete pancake only if her basicIngredient is only ingredient
+	    List<Pancake> pancakes=pRepo.findByBasicIngredient(i.get());
+	    for (Pancake pancake : pancakes) {
+			if (!pancake.getIngredients().isEmpty()) {
+				pancake.setBasicIngredient(pancake.getIngredients().iterator().next());
+				pRepo.save(pancake);
+				break;
+			}
+		}
 	    
 		iRepo.delete(i.get());
 		deleteOrderIfEmpty();	
@@ -76,6 +85,7 @@ public class IngredientControllers {
 	    	ing.setName(i.getName());
 			ing.setPrice(i.getPrice());
 			ing.setCategory(i.getCategory());
+			ing.setHealthy(i.isHealthy());
 			return new ResponseEntity<Ingredient>(iRepo.save(ing), HttpStatus.CREATED);
 	    }
 	    else

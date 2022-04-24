@@ -11,10 +11,10 @@ public class Report {
 	
 	public Report(LocalDateTime lastMonth, LocalDateTime now, Ingredient mostOrderedIngredient, Ingredient mostOrderedHealthyIngredient) {
 		super();
-		this.mostOrderedIngredient = mostOrderedIngredient;
-		this.mostOrderedHealthyIngredient = mostOrderedHealthyIngredient;
 		dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
 		title="REPORTING PERIOD: from "+lastMonth.format(dtf) +" to "+now.format(dtf);
+		this.mostOrderedIngredient = mostOrderedIngredient;
+		this.mostOrderedHealthyIngredient = mostOrderedHealthyIngredient;
 	}
 
 	public String getTitle() {

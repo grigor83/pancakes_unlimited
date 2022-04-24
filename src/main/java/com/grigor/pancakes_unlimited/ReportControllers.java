@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -17,11 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportControllers {
 	@Autowired
 	IngredientRepo iRepo;
-	@Autowired
-	PancakeRepo pRepo;
-	//@Autowired
-	@Autowired
-	OrderRepo oRepo;
 	@PersistenceContext
 	EntityManager em;
 	
@@ -31,7 +27,7 @@ public class ReportControllers {
 		LocalDateTime now = LocalDateTime.now();  
 		LocalDateTime lastMonth = now.minusDays(30);
 		
-		Query query= em.createNativeQuery("SELECT ingredient_id FROM"
+		Query queryIngredient= em.createNativeQuery("SELECT ingredient_id FROM"
 				+ "("
 				+ "SELECT ingredient_id, COUNT(*) AS maximum FROM"
 				+ "("
@@ -44,12 +40,42 @@ public class ReportControllers {
 				+ ") AS FIRST_TABLE "
 				+ "GROUP BY ingredient_id"
 				+ ") AS SECOND_TABLE "
-				+ "ORDER BY maximum LIMIT 1");
-		
-		query.setParameter("monthBefore", lastMonth);
-		BigInteger id=  (BigInteger) query.getSingleResult();
+				+ "ORDER BY maximum DESC LIMIT 1");
+		queryIngredient.setParameter("monthBefore", lastMonth);
+		BigInteger id = null;
+		try {
+			id=  (BigInteger) queryIngredient.getSingleResult();
+		}
+		catch(NoResultException nor) {
+			return new Report (lastMonth, now,null,null);
+		}
 	    Ingredient ingredient=iRepo.findById(id.longValue()).get();
-		
-		return new Report(lastMonth, now, ingredient, null);
+	    
+	    Query queryHealthyIngredient= em.createNativeQuery("SELECT ingredient_id FROM"
+				+ "("
+				+ "SELECT ingredient_id, COUNT(*) AS maximum FROM"
+				+ "("
+				+ "SELECT pancakes_list.order_id, time, pancakes_list.pancake_id, ingredient_id, healthy "
+				+ "FROM pancakes_list JOIN order_table "
+				+ "ON order_table.id = pancakes_list.order_id "
+				+ "JOIN ingredients_list "
+				+ "ON ingredients_list.pancake_id=pancakes_list.pancake_id "
+				+ "JOIN ingredient "
+				+ "ON ingredient_id=ingredient.id "
+				+ "WHERE healthy AND  time >= :monthBefore "
+				+ ") AS FIRST_TABLE "
+				+ "GROUP BY ingredient_id"
+				+ ") AS SECOND_TABLE "
+				+ "ORDER BY maximum DESC LIMIT 1");
+	    queryHealthyIngredient.setParameter("monthBefore", lastMonth);
+	    try {
+			id=  (BigInteger) queryHealthyIngredient.getSingleResult();
+		}
+		catch(NoResultException nor) {
+			return new Report (lastMonth, now, ingredient, null);
+		}
+	    Ingredient healtyIngredient=iRepo.findById(id.longValue()).get();
+	    
+		return new Report(lastMonth, now, ingredient, healtyIngredient);
 	}
 }

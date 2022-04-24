@@ -33,12 +33,7 @@ public class PancakeValidator implements ConstraintValidator<PancakeConstraint, 
 	    }
 		pancake.getIngredients().add(pancake.getBasicIngredient());
 	    p.setBasicIngredient(pancake.getBasicIngredient());
-	    p.setIngredients(pancake.getIngredients());	    
-	    for (Ingredient ing : pancake.getIngredients()) {
-		    System.out.println(ing.getName());
-		}
+	    p.setIngredients(pancake.getIngredients());	
 		return true;
 	}
-	
-
 }

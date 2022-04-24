@@ -36,7 +36,8 @@ public class OrderControllers {
 	public ResponseEntity<String> createOrder(@RequestBody @Valid Order o) {		
 		for (Pancake pancake : o.getPancakes()) {
 			Query query= em.createNativeQuery("SELECT pancake_id from pancakes_list where pancake_id="+pancake.getId());
-		    List<Object[]> list = query.getResultList();
+		    @SuppressWarnings("unchecked")
+			List<Object[]> list = query.getResultList();
 			if (list.size()!=0)
 		        return new ResponseEntity<>("Your order is not accepted! One of pancakes in order list has already been purchased!", HttpStatus.BAD_REQUEST);
 		}
